@@ -2,6 +2,7 @@ package WoWSFT.controller
 
 import WoWSFT.config.CustomProperties
 import WoWSFT.model.Constant.*
+import WoWSFT.model.custom.CustomSkill
 import WoWSFT.model.gameparams.commander.Commander
 import WoWSFT.model.gameparams.flag.Flag
 import WoWSFT.model.gameparams.ship.Ship
@@ -31,6 +32,7 @@ class GPController(
     @Qualifier(TYPE_SHIP_LIST) private val shipsList: LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<Int, List<ShipIndex>>>>>,
     @Qualifier(TYPE_COMMANDER) private val commanders: LinkedHashMap<String, Commander>,
     @Qualifier(TYPE_FLAG) private val flagsLHM: LinkedHashMap<String, Flag>,
+    @Qualifier(CUSTOM_SKIlL_GROUP) private val skillGroup: HashMap<String, List<List<CustomSkill>>>,
     private val gpService: GPService,
     private val paramService: ParamService,
     private val parserService: ParserService
@@ -88,6 +90,7 @@ class GPController(
             model.addAttribute("dataIndex", pos)
             model.addAttribute("commanders", commanders)
             model.addAttribute("flags", flagsLHM)
+            model.addAttribute("skillGroup", skillGroup)
 
             val sSkills = if (skills > maxBitsToInt) 0 else skills
             val ship = getShip(index.toUpperCase(), modules, upgrades, consumables, sSkills, commander.toUpperCase(), flags, ar)

@@ -18,7 +18,7 @@ class Commander
     var name = ""
     var typeinfo = TypeInfo()
     @JsonProperty("CrewSkills")
-    var crewSkills = MutableList(4) { MutableList(8) { Skill() } }
+    var crewSkills = LinkedHashMap<String, Skill>()
 
     companion object {
         @JsonIgnore
@@ -30,8 +30,9 @@ class Commander
         if (name.equals("Skills", ignoreCase = true)) {
             val temp = mapper.convertValue(value, object : TypeReference<LinkedHashMap<String, Skill>>() {})
             temp.forEach { (k: String, v: Skill) ->
-                v.modifier = k
-                crewSkills[v.tier - 1][v.column] = v
+                v.name = k
+                v.nameSplit = "(?<=[a-zA-Z])[A-Z]".toRegex().replace(k) { "_${it.value}" }.toLowerCase()
+                crewSkills[k] = v
             }
         }
     }

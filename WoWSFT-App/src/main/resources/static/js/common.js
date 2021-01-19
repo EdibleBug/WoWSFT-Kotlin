@@ -113,7 +113,7 @@ $(document).on('click', function () {
     // }
 });
 
-var $maxSpts = 19;
+var $maxSpts = 21;
 $(document).on('click', '.button_skill', function () {
     var $this = $(this),
         $index = parseInt($this.attr('data-index')),
@@ -163,7 +163,7 @@ $(document).on('click', '.button_skill', function () {
         $ship.find('.button_skill[data-index=' + $index + '][data-position=' + $pos +']').addClass('select');
     }
 
-    var adrenalRush = $curCommander.find('.button_skill[data-index=1][data-position=6]');
+    var adrenalRush = $curCommander.find('.button_skill[data-ar=true]');
     var adrenalSlider = $ship.find('.adrenalineRush');
     if (adrenalRush.hasClass('select')) {
         adrenalSlider.css('display', 'inline-flex')
@@ -268,9 +268,10 @@ function makeUrl($ship)
     var useAr = false;
     var skills = 0;
     for (var i = 0; i < $sSkills.length; i++) {
-        var pos = parseInt($sSkills.eq(i).attr('data-index')) * 8 + parseInt($sSkills.eq(i).attr('data-position'));
+        var arUse = $sSkills.eq(i).attr('data-ar')
+        var pos = parseInt($sSkills.eq(i).attr('data-index')) * 6 + parseInt($sSkills.eq(i).attr('data-position'));
         skills += Math.pow(2, pos);
-        if (pos === 14) {
+        if (arUse === 'true') {
             useAr = true;
         }
     }

@@ -4,22 +4,32 @@ import WoWSFT.config.WoWSFT
 import WoWSFT.model.Constant.CDN_IMAGE
 import WoWSFT.model.gameparams.CommonModifier
 import com.fasterxml.jackson.annotation.JsonAlias
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
 
 @WoWSFT
 class Skill : CommonModifier()
 {
-    var tier = 0
-    @JsonInclude
-    var column = 0
-    @JsonIgnore
+    var tier = SkillTier()
+
     var skillType = 0
-    @JsonIgnore
-    var turnOffOnRetraining = false
+
+    var canBeLearned = true
+
     @JsonAlias("isEpic")
     var epic = false
+
     var bonus = LinkedHashMap<String, String>()
+
     var description = ""
-    val image get() = "$CDN_IMAGE/skills/icon_perk_$modifier.png"
+
+    @JsonProperty("LogicTrigger")
+    var logicTrigger = LogicTrigger()
+
+    var name = ""
+
+    var nameSplit = ""
+
+    val image get() = "$CDN_IMAGE/skills/$nameSplit.png"
+
+
 }

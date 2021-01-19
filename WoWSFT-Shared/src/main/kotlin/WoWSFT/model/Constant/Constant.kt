@@ -13,6 +13,7 @@ import java.math.BigDecimal
 
     const val AP = "AP"
     const val HE = "HE"
+    const val CS = "CS"
     const val EN = "en"
     const val IDS = "IDS"
     const val IDS_ = "IDS_"
@@ -79,12 +80,13 @@ import java.math.BigDecimal
     val noUnit = hashSetOf("num")
     val extra = hashSetOf("count", "level", "additional")
     val meter = hashSetOf("radius", "height", "dist")
-    val rate = hashSetOf("regeneration", "probabilitybonus", "chance")
+    val rate = hashSetOf("regeneration", "probabilitybonus", "chancebonus")
     val rateNoSym = hashSetOf("step")
     val multiple = hashSetOf("multiplier")
     val extraAngle = hashSetOf("gunbonus")
     val angle = hashSetOf("angle")
     val time = hashSetOf("time")
+    val consumableTime = hashSetOf("workTime", "reloadTime", "lifeTime")
     val speed = hashSetOf("speedbonus")
 
     const val maxBitsToInt = 3766517952L
@@ -95,7 +97,15 @@ import java.math.BigDecimal
     const val NOTIFICATION = "notification"
     const val GLOBAL = "global"
     const val JSON_PARSER = "jsonParser"
+    const val CUSTOM_SKIlL_GROUP = "customSkillGroup"
 
     const val CDN_IMAGE = "https://cdn.wowsft.com/images"
     const val CDN = "https://cdn.wowsft.com/"
+
+    const val AIRCARRIER = "AirCarrier"
+    const val AUXILIARY = "Auxiliary"
+    const val BATTLESHIP = "Battleship"
+    const val CRUISER = "Cruiser"
+    const val DESTROYER = "Destroyer"
+    const val SUBMARINE = "Submarine"
 //}

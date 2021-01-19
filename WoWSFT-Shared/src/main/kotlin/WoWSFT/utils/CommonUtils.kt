@@ -1,8 +1,11 @@
 package WoWSFT.utils
 
 import WoWSFT.model.Constant.*
+import WoWSFT.model.gameparams.CommonModifier
+import WoWSFT.model.gameparams.CommonModifierShip
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.io.IOException
 import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
@@ -55,13 +58,49 @@ object CommonUtils
     {
         val bonus = LinkedHashMap<String, String>()
         copy.forEach { (param: String, cVal: Any) ->
-            if (speed.stream().anyMatch { param.toLowerCase().contains(it) }) {
+            if (cVal is LinkedHashMap<*, *>) {
+                val cValConvert = mapper.convertValue(cVal, jacksonTypeRef<CommonModifierShip>())
+                if (cValConvert.aircraftCarrier != 1.0 && cValConvert.aircraftCarrier != 0.0) {
+                    bonus["${MODIFIER}${param.toUpperCase()}_${AIRCARRIER.toUpperCase()}"] = "${getNumSym(
+                        if (cValConvert.aircraftCarrier >= 0.1) getBonusCoef(cValConvert.aircraftCarrier)
+                        else getBonus(cValConvert.aircraftCarrier)
+                    )} %"
+                }
+                if (cValConvert.battleship != 1.0 && cValConvert.battleship != 0.0) {
+                    bonus["${MODIFIER}${param.toUpperCase()}_${BATTLESHIP.toUpperCase()}"] = "${getNumSym(
+                        if (cValConvert.battleship >= 0.1) getBonusCoef(cValConvert.battleship)
+                        else getBonus(cValConvert.battleship)
+                    )} %"
+                }
+                if (cValConvert.cruiser != 1.0 && cValConvert.cruiser != 0.0) {
+                    bonus["${MODIFIER}${param.toUpperCase()}_${CRUISER.toUpperCase()}"] = "${getNumSym(
+                        if (cValConvert.cruiser >= 0.1) getBonusCoef(cValConvert.cruiser)
+                        else getBonus(cValConvert.cruiser)
+                    )} %"
+                }
+                if (cValConvert.destroyer != 1.0 && cValConvert.destroyer != 0.0) {
+                    bonus["${MODIFIER}${param.toUpperCase()}_${DESTROYER.toUpperCase()}"] = "${getNumSym(
+                        if (cValConvert.destroyer >= 0.1) getBonusCoef(cValConvert.destroyer)
+                        else getBonus(cValConvert.destroyer)
+                    )} %"
+                }
+            } else if (param == "shootShift") {
+                bonus["${MODIFIER}${param.toUpperCase()}"] = "${getNumSym(getBonusCoef(cVal as Double))} %"
+            } else if (param.endsWith("multiplier", false)) {
+                bonus["${MODIFIER}${param.toUpperCase()}"] = "${getNumSym(getBonusCoef(cVal as Double))} %"
+            } else if (param.startsWith("lastChance")) {
+                bonus["${MODIFIER}${param.toUpperCase()}"] = "${replaceZero(cVal.toString())} %"
+            } else if (param.contains("ChanceFactor")) {
+                bonus["${MODIFIER}${param.toUpperCase()}"] = "${getNumSym(getBonusCoef(cVal as Double))} %"
+            } else if (rate.stream().anyMatch { param.toLowerCase().contains(it) }) {
+                bonus["${MODIFIER}${param.toUpperCase()}"] = "${getNumSym(getBonus(cVal as Double))} %"
+            } else if (param.toLowerCase().endsWith("bonus")) {
+                bonus["${MODIFIER}${param.toUpperCase()}"] = "${replaceZero(cVal.toString())} %"
+            } else if (speed.stream().anyMatch { param.toLowerCase().contains(it) }) {
                 bonus["${MODIFIER}${param.toUpperCase()}"] = "${getNumSym(cVal as Double)} kts"
             } else if (param.toLowerCase().contains("boostcoeff")) {
                 if (cVal as Double >= 2.0) bonus["${MODIFIER}${param.toUpperCase()}"] = getNumSym(cVal)
                 else bonus["${MODIFIER}${param.toUpperCase()}"] = "${getNumSym(getBonus(cVal))} %"
-            } else if (rate.stream().anyMatch { param.toLowerCase().contains(it) }) {
-                bonus["${MODIFIER}${param.toUpperCase()}"] = "${getNumSym(getBonus(cVal as Double))} %"
             } else if (multiple.stream().anyMatch { param.toLowerCase().contains(it) }) {
                 bonus["${MODIFIER}${param.toUpperCase()}"] = "X ${replaceZero(cVal.toString())}"
             } else if (coeff.stream().anyMatch { param.toLowerCase().contains(it) }) {
@@ -72,6 +111,10 @@ object CommonUtils
                 bonus["${MODIFIER}${param.toUpperCase()}"] = "${getDistCoefWG(cVal as Double)} km"
             } else if (rateNoSym.stream().anyMatch { param.toLowerCase().contains(it) }) {
                 bonus["${MODIFIER}${param.toUpperCase()}"] = "${replaceZero(cVal.toString())} %"
+            } else if (consumableTime.stream().anyMatch { param.contains(it) }) {
+                bonus["${MODIFIER}${param.toUpperCase()}"] = "${replaceZero(cVal.toString())} s"
+            } else if (param.toLowerCase().endsWith("time") && cVal is Double) {
+                bonus["${MODIFIER}${param.toUpperCase()}"] = "${getNumSym(getBonusCoef(cVal))} %"
             } else if (time.stream().anyMatch { param.toLowerCase().contains(it) }) {
                 bonus["${MODIFIER}${param.toUpperCase()}"] = "${replaceZero(cVal.toString())} s"
             } else if (extraAngle.stream().anyMatch { param.toLowerCase().contains(it) }) {
@@ -89,6 +132,8 @@ object CommonUtils
                     }
                     bonus["${MODIFIER}${param.toUpperCase()}"] = affected.trim()
                 }
+            } else if (param.toLowerCase().contains("delay")) {
+                bonus["${MODIFIER}${param.toUpperCase()}"] = "${getNumSym(getBonusCoef(cVal as Double))} %"
             }
         }
         return bonus

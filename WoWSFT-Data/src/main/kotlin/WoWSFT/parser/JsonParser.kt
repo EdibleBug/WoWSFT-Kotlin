@@ -400,8 +400,29 @@ class JsonParser
     {
         commanders.forEach { (_, commander) ->
             commander.crewSkills.forEach { r ->
-                r.forEach { s ->
-                    s.bonus = CommonUtils.getBonus(mapper.convertValue(s, object: TypeReference<LinkedHashMap<String, Any>>() {}))
+                val temp = mapper.readValue(mapper.writeValueAsString(r.value), jacksonTypeRef<LinkedHashMap<String, Any?>>()).also {
+                    it.remove("tier")
+                    it.remove("skillType")
+                    it.remove("canBeLearned")
+                    it.remove("epic")
+                    it.remove("bonus")
+                    it.remove("description")
+                    it.remove("name")
+                    it.remove("nameSplit")
+                    it.remove("image")
+                }
+                val logicTrigger = mapper.convertValue(temp["LogicTrigger"], jacksonTypeRef<LinkedHashMap<String, Any>>())
+                val modifiers = mapper.convertValue(logicTrigger["modifiers"], jacksonTypeRef<LinkedHashMap<String, Any>>())
+                temp.remove("LogicTrigger")
+                temp.forEach { t -> CommonUtils.getBonus(mapper.convertValue(t, object: TypeReference<LinkedHashMap<String, Any>>() {})).run {
+                    this.forEach { (x, y) ->
+                        r.value.bonus[x] = y
+                    }
+                } }
+                if (!modifiers.isNullOrEmpty()) {
+                    CommonUtils.getBonus(modifiers).forEach { (t, u) ->
+                        r.value.bonus[t] = u
+                    }
                 }
             }
         }

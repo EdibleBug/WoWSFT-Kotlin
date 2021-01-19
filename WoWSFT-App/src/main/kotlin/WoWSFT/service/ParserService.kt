@@ -149,8 +149,8 @@ class ParserService(
 
         for (i in bits.length - 1 downTo 0) {
             val check = Character.getNumericValue(bits[i])
-            val tempPts = (bits.length - 1 - i) / 8 + 1
-            if (check == 1 && tempPts + pts <= 19) {
+            val tempPts = (bits.length - 1 - i) / 6 + 1
+            if (check == 1 && tempPts + pts <= 21) {
                 pts += tempPts
                 list.add(Character.getNumericValue(bits[i]))
                 // Adrenaline Rush
@@ -162,8 +162,8 @@ class ParserService(
                 list.add(0)
             }
         }
-        if (bits.length < 32) {
-            for (i in 0 until 32 - bits.length) {
+        if (bits.length < 24) {
+            for (i in 0 until 24 - bits.length) {
                 list.add(0)
             }
         }

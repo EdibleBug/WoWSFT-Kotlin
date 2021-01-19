@@ -27,9 +27,11 @@
     </div>
 </header>
 <main>
+    <th:block th:replace="Joint/adToggle :: adToggle"></th:block>
+    <br />
     <div id="notification">
         <img id="logo" src="https://cdn.wowsft.com/images/Icon/WoWSFT_Icon.png" alt="Logo courtesy of ReptorPi from DCInside" /><br />
-        <h2>WoWS 0.9.12.0</h2><br />
+        <h2>WoWS 0.10.0.0</h2><br />
         <br />
         <ul>
             <li th:if="${5 > noticeStat.index}" th:each="notice : ${notification}">

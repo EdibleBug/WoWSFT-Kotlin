@@ -27,7 +27,7 @@ open class CommonModifier
     @JsonProperty("GMRepairTime")
     var gmRepairTime = 1.0
     @JsonProperty("GMRotationSpeed")
-    var gmRotationSpeed = 1.0
+    var gmRotationSpeed: CommonModifierShip? = null
     @JsonProperty("GMShotDelay")
     var gmShotDelay = 1.0
     @JsonProperty("GMSigmaCount")
@@ -93,7 +93,7 @@ open class CommonModifier
     var trigger4SearchWorkTime = 1.0
     var trigger5SearchWorkTime = 1.0
     var trigger6SearchWorkTime = 1.0
-    var visibilityDistCoeff = 1.0
+    var visibilityDistCoeff: CommonModifierShip? = null
     var visionDistCoeff = 1.0
     var visionTorpedoCoeff = 1.0
     var visionXRayShipCoeff = 1.0
@@ -325,4 +325,110 @@ open class CommonModifier
     var extraDamageChance = 0.0
     var extraDamageFactor = 1.0
     var waveSpeedMultiplier = 1.0
+
+    @JsonProperty("AAAuraDamage")
+    var aaAuraDamage: CommonModifierShip? = null
+    @JsonProperty("AAAuraReceiveDamageCoeff")
+    var aaAuraReceiveDamageCoeff = 1.0
+    @JsonProperty("AABubbleDamage")
+    var aaBubbleDamage: CommonModifierShip? = null
+    var artilleryBurnChanceBonus = CommonModifierShip(0.0)
+    var prioritySectorStrengthBonus = 0
+    @JsonProperty("GMAPDamageCoeff")
+    var gmAPDamageCoeff = 1.0
+    @JsonProperty("GMHeavyCruiserCaliberDamageCoeff")
+    var gmHeavyCruiserCaliberDamageCoeff = 1.0
+    var lastChanceReloadCoefficient = 0.0
+    @JsonProperty("GSPriorityTargetIdealRadius")
+    var gsPriorityTargetIdealRadius = 1.0
+    var crashCrewAdditionalConsumables = 0
+    var crashCrewReloadCoeff = 1.0
+    var crashCrewWorkTimeCoeff = 1.0
+    var regenCrewAdditionalConsumables = 0
+    var regenCrewReloadCoeff = 1.0
+    var regenCrewWorkTimeCoeff = 1.0
+    var rlsWorkTimeCoeff = 1.0
+    var smokeGeneratorWorkTimeCoeff = 1.0
+    var sonarWorkTimeCoeff = 1.0
+    var speedBoostersWorkTimeCoeff = 1.0
+    var airDefenseDispReloadCoeff = 1.0
+    var artilleryBoostersReloadCoeff = 1.0
+    var fighterReloadCoeff = 1.0
+    var scoutAdditionalConsumables = 0
+    var scoutReloadCoeff = 1.0
+    var scoutWorkTimeCoeff = 1.0
+    var torpedoReloaderReloadCoeff = 1.0
+    var hlCritTimeCoeff = 1.0
+    var fireResistanceEnabled = false
+    var priorityTargetEnabled = false
+    var artilleryAlertEnabled = false
+    var artilleryAlertMinDistance = 0.0
+    var nearEnemyIntuitionEnabled = false
+    var torpedoDetectionCoefficient = 1.0
+    var torpedoDetectionCoefficientByPlane = 1.0
+    var bombBurnChanceBonus = 0.0
+    var rocketBurnChanceBonus = 0.0
+    var burnChanceFactorHighLevel = 1.0
+    var burnChanceFactorLowLevel = 1.0
+    var penetrationCoeffHE = 1.0
+    @JsonProperty("GMBigGunVisibilityCoeff")
+    var gmBigGunVisibilityCoeff = 1.0
+    @JsonProperty("GMHECSDamageCoeff")
+    var gmHECSDamageCoeff = 1.0
+    @JsonProperty("SGCritRudderTime")
+    var sgCritRudderTime = 1.0
+    var softCriticalEnabled = false
+    var damagedEngineCoeff = 1.0
+    var skipBomberAccuracyIncRateCoeff = 1.0
+    var bombApAlphaDamageMultiplier = 1.0
+    var rocketApAlphaDamageMultiplier = 1.0
+    var callFightersAdditionalConsumables = 0
+    var callFightersAppearDelay = 1.0
+    var callFightersTimeDelayAttack = 1.0
+    var callFightersWorkTimeCoeff = 1.0
+    var callFightersRadiusCoeff = 1.0
+    var callFightersAirOnly = false
+    var consumableDescID = ""
+    var consumableIconID = ""
+    var consumableTitleID = ""
+    var regenerateHealthAdditionalConsumables = 0
+    var regenerateHealthWorkTimeCoeff = 1.0
+    var healForsageReloadCoeff = 1.0
+    var planeBubbleArmorCoeff = 1.0
+    var skipBomberSpeedMultiplier = 1.0
+    var planeForsageDrainRate = 1.0
+    var restoreForsage = false
+    var planeTorpedoArmingTimeCoeff = 1.0
+    var ignorePTZBonus = 0
+    @JsonProperty("GMDamageCoeff")
+    var gmDamageCoeff = 1.0
+    @JsonProperty("GMRotationSpeedBonus")
+    var gmRotationSpeedBonus = 0.0
+    @JsonProperty("GSIdealRadiusHighLevel")
+    var gsIdealRadiusHighLevel = 1.0
+    @JsonProperty("GSIdealRadiusLowLevel")
+    var gsIdealRadiusLowLevel = 1.0
+    @JsonProperty("GSRotationSpeed")
+    var gsRotationSpeed = 1.0
+    @JsonProperty("GSRotationSpeedBonus")
+    var gsRotationSpeedBonus = 0.0
+    @JsonProperty("GTRotationSpeedBonus")
+    var gtRotationSpeedBonus = 0.0
+    @JsonProperty("GWRotationSpeedBonus")
+    var gwRotationSpeedBonus = 0.0
+    var airDefenseDispWorkTimeCoeff = 1.0
+    var allConsumableReloadTime = 1.0
+    var fighterWorkTimeCoeff = 1.0
+    var lastChanceSquadronSpeedCoefficient = 0.0
+    var prioritySectorPhaseDurationCoefficient = 1.0
+    var prioritySectorStartPhaseStrengthCoefficient = 1.0
+    var regenerateHealthReloadCoeff = 1.0
+    var rlsReloadCoeff = 1.0
+    var skipBomberHealth = 1.0
+    var skipBomberMaxSpeedMultiplier = 1.0
+    var skipBomberMinSpeedMultiplier = 1.0
+    var smokeGeneratorReloadCoeff = 1.0
+    var smokeScreenRadiusCoefficient = 1.0
+    var sonarReloadCoeff = 1.0
+    var speedBoostersReloadCoeff = 1.0
 }

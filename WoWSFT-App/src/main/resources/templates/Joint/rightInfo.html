@@ -59,8 +59,13 @@
                         <td th:text="${#numbers.formatDecimal(artillery.sigmaCount, 1, 2)} + ' σ'"></td>
                     </tr>
                     <tr class="toggle guns">
-                        <td th:text="'- ' + ${global.get('IDS_SHIP_PARAM_DISPERSION')}"></td>
+                        <td th:text="'- ' + ${global.get('IDS_SHIP_PARAM_DISPERSION')} + ' Horiz'"></td>
                         <td th:text="${#numbers.formatInteger(T(Math).ceil(((turret0.idealRadius * artillery.GMIdealRadius - turret0.minRadius) / turret0.idealDistance * (artillery.maxDist * suo.maxDistCoef / 30.0) + turret0.minRadius) * 30.0 * turret0.idealRadiusModifier), 1, 'COMMA')} + ' m'"></td>
+                    </tr>
+                    <!-- https://www.reddit.com/r/WorldOfWarships/comments/l1dpzt/reverse_engineered_dispersion_ellipse_including/-->
+                    <tr class="toggle guns">
+                        <td th:text="'- ' + ${global.get('IDS_SHIP_PARAM_DISPERSION')} + ' Verti'"></td>
+                        <td th:text="${#numbers.formatInteger(T(Math).ceil(((turret0.idealRadius * artillery.GMIdealRadius - turret0.minRadius) / turret0.idealDistance * (artillery.maxDist * suo.maxDistCoef / 30.0) + turret0.minRadius) * (turret0.radiusOnDelim + (turret0.radiusOnMax - turret0.radiusOnDelim)) * 30.0 * turret0.idealRadiusModifier), 1, 'COMMA')} + ' m'"></td>
                     </tr>
                     <th:block th:each="shell : ${artillery.shells}" th:with="ammo=${shell.value}">
                         <tr class="subsystem switch" th:attr="data-type=${ammo.index}">

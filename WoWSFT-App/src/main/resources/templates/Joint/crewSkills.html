@@ -3,7 +3,7 @@
 <body>
 <div th:fragment="crewSkills" class="panel_left" data-type="crewSkills" th:with="nation=${warship.typeinfo.nation}">
     <div class="switch" data-type="skills">
-        <strong th:text="${global.get('IDS_CREW_PERKS')} + ' : '"></strong><strong class="points" th:text="${warship.selectSkillPts}"></strong><strong> / 19</strong>
+        <strong th:text="${global.get('IDS_SKILLS_FOR_' + warship.typeinfo.species.toUpperCase())} + ' : '"></strong><strong class="points" th:text="${warship.selectSkillPts}"></strong><strong> / 21</strong>
     </div>
     <div class="toggle skills">
         <label style="display: inline-flex;">
@@ -28,18 +28,18 @@
         <tbody class="commander_body"
                th:each="commander : ${commanders.entrySet().?[value.CrewPersonality.ships.nation.contains(__${#strings.concat('''', nation, '''')}__) or key == 'PCW001']}"
                th:classappend="${commander.key != warship.commander.index ? 'disable' : ''}" th:attr="data-commander-index=${commander.key}">
-            <tr th:each="skillTier : ${commander.value.crewSkills}">
-                <td th:each="skill : ${skillTier}">
-                    <button th:class="'button_skill'" th:classappend="${warship.selectSkills.get(skillTierStat.index * 8 + skillStat.index) == 1 ? 'select' : ''}"
-                            th:attr="data-index=${skillTierStat.index}, data-position=${skillStat.index}">
+            <tr th:each="skillTier : ${skillGroup.get(warship.typeinfo.species)}">
+                <td th:each="skill : ${skillTier}" th:with="tSkill=${commander.value.crewSkills.get(skill.name)}">
+                    <button th:class="'button_skill'" th:classappend="${warship.selectSkills.get(skillTierStat.index * 6 + skillStat.index) == 1 ? 'select' : ''}"
+                            th:attr="data-index=${skillTierStat.index}, data-position=${skillStat.index}, data-ar=${skill.name == 'ArmamentReloadAaDamage'}">
                         <img th:src="${skill.image}"/>
-                        <div class="overlay" th:if="${skill.epic}"></div>
+                        <div class="overlay" th:if="${tSkill != null and tSkill.epic}"></div>
                         <table class="tooltip">
                             <tbody>
-                                <tr><td colspan="2" th:utext="${global.get(IDS + 'SKILL_' + skill.modifier.toUpperCase())}"></td></tr>
+                                <tr><td colspan="2" th:utext="${global.get(IDS + 'SKILL_' + skill.nameSplit.toUpperCase())}"></td></tr>
                                 <tr><td colspan="2">&nbsp;</td></tr>
-                                <tr><td colspan="2" th:utext="${#strings.replace(global.get(IDS + 'SKILL_DESC_' + skill.modifier.toUpperCase()), '&#10', '<br />')}"></td></tr>
-                                <th:block th:each="b : ${skill.bonus}" th:with="desc=${global.get(IDS + b.key)}">
+                                <tr><td colspan="2" th:utext="${#strings.replace(global.get(IDS + 'SKILL_DESC_' + skill.nameSplit.toUpperCase()), '&#10', '<br />')}"></td></tr>
+                                <th:block th:each="b : ${tSkill.bonus}" th:with="desc=${global.get(IDS + b.key)}">
                                     <tr th:if="${desc != null}" class="tooltip_desc">
                                         <td th:utext="${desc}"></td>
                                         <td th:utext="${b.value}"></td>
