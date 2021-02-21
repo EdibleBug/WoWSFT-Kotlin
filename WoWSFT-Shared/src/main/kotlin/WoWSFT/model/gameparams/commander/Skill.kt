@@ -4,10 +4,12 @@ import WoWSFT.config.WoWSFT
 import WoWSFT.model.Constant.CDN_IMAGE
 import WoWSFT.model.gameparams.CommonModifier
 import com.fasterxml.jackson.annotation.JsonAlias
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
 @WoWSFT
-class Skill : CommonModifier()
+@JsonIgnoreProperties(ignoreUnknown = true)
+class Skill
 {
     var tier = SkillTier()
 
@@ -17,6 +19,8 @@ class Skill : CommonModifier()
 
     @JsonAlias("isEpic")
     var epic = false
+
+    var modifiers = CommonModifier()
 
     var bonus = LinkedHashMap<String, String>()
 
@@ -30,6 +34,4 @@ class Skill : CommonModifier()
     var nameSplit = ""
 
     val image get() = "$CDN_IMAGE/skills/$nameSplit.png"
-
-
 }

@@ -111,7 +111,7 @@ class JsonParser
             } else if (typeInfo.type.equals("Modernization", ignoreCase = true)) {
                 val modernization = mapper.convertValue(value, Modernization::class.java)
                 if (modernization.slot >= 0) {
-                    paramService.setBonusParams(key, mapper.convertValue(modernization, object: TypeReference<LinkedHashMap<String, Any>>() {}), modernization.bonus, false)
+                    paramService.setBonusParams(key, mapper.convertValue(modernization, jacksonTypeRef<LinkedHashMap<String, Any>>()), modernization.bonus, false)
                     upgrades[modernization.slot]!![modernization.name] = modernization
                 }
             } else if (typeInfo.type.equals("Ability", ignoreCase = true) && !excludeShipNations.contains(typeInfo.nation) && !key.contains("Super")) {
@@ -381,7 +381,7 @@ class JsonParser
     private fun sortUpgrades()
     {
         upgrades.forEach { (_, mod) ->
-            mod.entries.sortedWith(compareBy({ it.value.costCR }, { it.key })).forEach { u ->
+            mod.entries.sortedWith(compareBy({ it.value.modifiers.costCR }, { it.key })).forEach { u ->
                 mod.remove(u.key)
                 mod[u.key] = u.value
             }
@@ -400,25 +400,18 @@ class JsonParser
     {
         commanders.forEach { (_, commander) ->
             commander.crewSkills.forEach { r ->
-                val temp = mapper.readValue(mapper.writeValueAsString(r.value), jacksonTypeRef<LinkedHashMap<String, Any?>>()).also {
-                    it.remove("tier")
-                    it.remove("skillType")
-                    it.remove("canBeLearned")
-                    it.remove("epic")
-                    it.remove("bonus")
-                    it.remove("description")
-                    it.remove("name")
-                    it.remove("nameSplit")
-                    it.remove("image")
-                }
-                val logicTrigger = mapper.convertValue(temp["LogicTrigger"], jacksonTypeRef<LinkedHashMap<String, Any>>())
+                val temp = mapper.readValue(mapper.writeValueAsString(r.value.modifiers), jacksonTypeRef<LinkedHashMap<String, Any?>>())
+                val logicTrigger = mapper.convertValue(r.value.logicTrigger, jacksonTypeRef<LinkedHashMap<String, Any>>())
                 val modifiers = mapper.convertValue(logicTrigger["modifiers"], jacksonTypeRef<LinkedHashMap<String, Any>>())
-                temp.remove("LogicTrigger")
-                temp.forEach { t -> CommonUtils.getBonus(mapper.convertValue(t, object: TypeReference<LinkedHashMap<String, Any>>() {})).run {
-                    this.forEach { (x, y) ->
-                        r.value.bonus[x] = y
+
+                temp.forEach { t ->
+                    CommonUtils.getBonus(mapper.convertValue(t, object: TypeReference<LinkedHashMap<String, Any>>() {})).run {
+                        this.forEach { (x, y) ->
+                            r.value.bonus[x] = y
+                        }
                     }
-                } }
+                }
+
                 if (!modifiers.isNullOrEmpty()) {
                     CommonUtils.getBonus(modifiers).forEach { (t, u) ->
                         r.value.bonus[t] = u

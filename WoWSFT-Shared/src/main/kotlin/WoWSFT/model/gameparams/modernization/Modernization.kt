@@ -4,10 +4,12 @@ import WoWSFT.config.WoWSFT
 import WoWSFT.model.Constant.CDN_IMAGE
 import WoWSFT.model.gameparams.CommonModifier
 import WoWSFT.model.gameparams.TypeInfo
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
 @WoWSFT
-class Modernization : CommonModifier()
+@JsonIgnoreProperties(ignoreUnknown = true)
+class Modernization
 {
     var excludes = mutableListOf<String>()
     var group = mutableListOf<String>()
@@ -26,4 +28,5 @@ class Modernization : CommonModifier()
     val image get() = "$CDN_IMAGE/modernization_icons/icon_modernization_$name.png"
     var bonus = LinkedHashMap<String, String>()
     var description = ""
+    var modifiers = CommonModifier()
 }

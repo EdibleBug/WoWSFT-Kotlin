@@ -88,14 +88,14 @@ class ParamService(
     {
         for (i in ship.selectUpgrades.indices) {
             if (ship.selectUpgrades[i] > 0) {
-                val modifier = mapper.convertValue(ship.upgrades[i][ship.selectUpgrades[i] - 1], CommonModifier::class.java)
+                val modifier = mapper.convertValue(ship.upgrades[i][ship.selectUpgrades[i] - 1].modifiers, CommonModifier::class.java)
                 setUpgrades(ship, modifier)
             }
         }
 
         for (i in ship.selectSkills.indices) {
             if (ship.selectSkills[i] == 1) {
-                val modifier = mapper.convertValue(ship.commander!!.crewSkills[skillGroup[ship.typeinfo.species]!![i / 6][i % 6].name], CommonModifier::class.java)
+                val modifier = mapper.convertValue(ship.commander!!.crewSkills[skillGroup[ship.typeinfo.species]!![i / 6][i % 6].name]!!.modifiers, CommonModifier::class.java)
                 setUpgrades(ship, modifier)
 
                 val logicTrigger = mapper.convertValue(ship.commander!!.crewSkills[skillGroup[ship.typeinfo.species]!![i / 6][i % 6].name]!!.logicTrigger.modifiers, CommonModifier::class.java)
@@ -106,7 +106,7 @@ class ParamService(
         val flagsKey = flagsLHM.keys.toList()
         for (i in ship.selectFlags.indices) {
             if (ship.selectFlags[i] == 1) {
-                val modifier = mapper.convertValue(flagsLHM[flagsKey[i]], CommonModifier::class.java)
+                val modifier = mapper.convertValue(flagsLHM[flagsKey[i]]!!.modifiers, CommonModifier::class.java)
                 setUpgrades(ship, modifier)
             }
         }
@@ -190,7 +190,8 @@ class ParamService(
             if (c.equals(ship.modules[torpedoes], ignoreCase = true)) {
                 v.launchers.forEach { l: Launcher ->
                     l.rotationSpeed[0] = l.rotationSpeed[0] * modifier.gtRotationSpeed * getShipTypeModifier(ship, modifier.gmRotationSpeed)
-                    l.shotDelay = l.shotDelay * modifier.gtShotDelay * modifier.launcherCoefficient * (oneCoeff - ship.adrenaline / modifier.hpStep * modifier.timeStep)
+                    l.shotDelay = l.shotDelay * modifier.gtShotDelay * modifier.launcherCoefficient *
+                            (oneCoeff - ship.adrenaline * modifier.lastChanceReloadCoefficient)
                 }
 
                 v.ammo.maxDist = v.ammo.maxDist * modifier.torpedoRangeCoefficient
